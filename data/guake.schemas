@@ -1064,5 +1064,17 @@
                 context menu will be buit with the commands read inside.</long>
             </locale>
         </schema>
+
+        <schema>
+            <key>/schemas/apps/guake/general/predefined_tabs</key>
+            <applyto>/apps/guake/general/predefined_tabs</applyto>
+            <owner>guake</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>List of predefined tabs to open when Guake is launched.</short>
+                <long>List of predefined tabs to open when Guake is launched.</long>
+            </locale>
+        </schema>
     </schemalist>
 </gconfschemafile>

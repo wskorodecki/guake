@@ -8,6 +8,9 @@
     <property name="window_position">center-always</property>
     <property name="default_width">460</property>
     <property name="urgency_hint">True</property>
+    <signal name="destroy_event" handler="on_preferences_window_destroyed" swapped="no"/>
+    <signal name="destroy" handler="on_guake_preferences_window_destroyed" swapped="no"/>
+    <signal name="hide" handler="on_preferences_window_hidden" swapped="no"/>
     <child>
       <widget class="GtkVBox" id="vbox4">
         <property name="visible">True</property>
@@ -515,6 +518,23 @@ Always</property>
                                       </packing>
                                     </child>
                                     <child>
+                                      <widget class="GtkCheckButton" id="window_losefocus">
+                                        <property name="label" translatable="yes">Hide on lose focus</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_window_losefocus_toggled" swapped="no"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <widget class="GtkCheckButton" id="use_vte_titles">
                                         <property name="label" translatable="yes">Use VTE titles for tab names</property>
                                         <property name="visible">True</property>
@@ -533,6 +553,22 @@ Always</property>
                                       </packing>
                                     </child>
                                     <child>
+                                      <widget class="GtkCheckButton" id="window_tabbar">
+                                        <property name="label" translatable="yes">Show tab bar</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_window_tabbar_toggled" swapped="no"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <widget class="GtkCheckButton" id="abbreviate_tab_names">
                                         <property name="label" translatable="yes">Abbreviate directories in tab names</property>
                                         <property name="visible">True</property>
@@ -547,6 +583,22 @@ Always</property>
                                         <property name="expand">False</property>
                                         <property name="fill">False</property>
                                         <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkCheckButton" id="start_fullscreen">
+                                        <property name="label" translatable="yes">Start fullscreen</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_start_fullscreen_toggled" swapped="no"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -587,55 +639,6 @@ Always</property>
                                             <property name="position">2</property>
                                           </packing>
                                         </child>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkCheckButton" id="window_losefocus">
-                                        <property name="label" translatable="yes">Hide on lose focus</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_window_losefocus_toggled" swapped="no"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkCheckButton" id="window_tabbar">
-                                        <property name="label" translatable="yes">Show tab bar</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_window_tabbar_toggled" swapped="no"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkCheckButton" id="start_fullscreen">
-                                        <property name="label" translatable="yes">Start fullscreen</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_start_fullscreen_toggled" swapped="no"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">True</property>
@@ -1004,7 +1007,7 @@ Always</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
-					<signal name="toggled" handler="on_use_login_shell_toggled" swapped="no"/>
+                                        <signal name="toggled" handler="on_use_login_shell_toggled" swapped="no"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">True</property>
@@ -2195,6 +2198,55 @@ Blink off</property>
                   </packing>
                 </child>
                 <child>
+                  <widget class="GtkFrame" id="frame10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">none</property>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment14">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkTextView" id="predefined_tabs">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="text" translatable="yes">/
+~/</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label38">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Predefined tabs&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label28">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Predefined tabs</property>
+                  </widget>
+                  <packing>
+                    <property name="position">4</property>
+                    <property name="tab_fill">False</property>
+                    <property name="type">tab</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="GtkVBox" id="vbox17">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -2464,7 +2516,7 @@ For example, for sublime, use &lt;b&gt;subl %(file_path)s:%(line_number)s&lt;/b&
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -2474,7 +2526,7 @@ For example, for sublime, use &lt;b&gt;subl %(file_path)s:%(line_number)s&lt;/b&
                     <property name="label" translatable="yes">Quick Open</property>
                   </widget>
                   <packing>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
                     <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>
@@ -2522,7 +2574,7 @@ To disable a shortcut, press the "Backspace" key.</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
                 <child>
@@ -2532,7 +2584,7 @@ To disable a shortcut, press the "Backspace" key.</property>
                     <property name="label" translatable="yes">Keyboard shortcuts</property>
                   </widget>
                   <packing>
-                    <property name="position">5</property>
+                    <property name="position">6</property>
                     <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>
@@ -2692,7 +2744,7 @@ Control-H</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">6</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
                 <child>
@@ -2702,7 +2754,7 @@ Control-H</property>
                     <property name="label" translatable="yes">Compatibility</property>
                   </widget>
                   <packing>
-                    <property name="position">6</property>
+                    <property name="position">7</property>
                     <property name="tab_fill">False</property>
                     <property name="type">tab</property>
                   </packing>

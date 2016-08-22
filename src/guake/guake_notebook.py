@@ -82,3 +82,4 @@ class GuakeNotebook(Notebook):
 
     def append_tab(self, terminal):
         self.term_list.append(terminal)
+        return len(self.term_list) - 1

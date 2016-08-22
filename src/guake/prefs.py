@@ -24,6 +24,7 @@ from __future__ import print_function
 import gconf
 import gobject
 import gtk
+import sys
 import logging
 import os
 import re
@@ -412,6 +413,15 @@ class PrefsCallbacks(object):
         """
         value = hscale.get_value()
         self.client.set_int(KEY('/style/background/transparency'), int(value))
+
+    # "predefined tabs" tab
+
+    def on_predefined_tabs_changed(self, combo):
+        """Saves contents of "predefined tabs" tab
+        """
+        log.debug("on_predefined_tabs_changed")
+        sys.stdout.write("on_predefined_tabs_changed\n")
+        self.client.set_string(KEY('/general/predefined_tabs'), predefined_tabs)
 
     # compatibility tab
 
@@ -962,6 +972,30 @@ class PrefsDialog(SimpleGladeApp):
         self.get_widget('custom_command_file_chooser').add_filter(all_files_filter)
         if custom_command_file_name:
             self.get_widget('custom_command_file_chooser').set_filename(custom_command_file_name)
+
+        value = self.client.get_string(KEY('/general/predefined_tabs'))
+
+        text_view_buffer = self.get_widget('predefined_tabs').get_property('buffer')
+        if value is not None:
+            text_view_buffer.set_text(value)
+
+    def on_guake_preferences_window_hidden(self, predefined_tabs_textview):
+        log.debug("on_guake_preferences_window_hidden")
+        sys.stdout.write("on_guake_preferences_window_hidden\n")
+        sys.stdout.flush()
+        self.client.set_string(KEY('/general/predefined_tabs'), predefined_tabs_textview.get_text())
+
+    def on_guake_preferences_window_destroyed(self, widget):
+        log.debug("on_guake_preferences_window_destroyed")
+        sys.stdout.write("on_guake_preferences_window_destroyed\n")
+        predefined_tabs_textview = self.get_widget('predefined_tabs')
+        text_view_buffer = predefined_tabs_textview.get_property('buffer')
+        start = text_view_buffer.get_start_iter()
+        end = text_view_buffer.get_end_iter()
+        value = text_view_buffer.get_text(start, end)
+        self.client.set_string(KEY('/general/predefined_tabs'), value)
+        sys.stdout.write("\n")
+        sys.stdout.flush()
 
     # -- populate functions --
 

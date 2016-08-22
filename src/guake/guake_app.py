@@ -350,14 +350,34 @@ class Guake(SimpleGladeApp):
         # resizer stuff
         self.resizer.connect('motion-notify-event', self.on_resizer_drag)
 
-        # adding the first tab on guake
-        self.add_tab()
-
         # loading and setting up configuration stuff
         GConfHandler(self)
         self.hotkeys = keybinder
         GConfKeyHandler(self)
         self.load_config()
+
+        useVteTitles = self.client.get_bool(KEY("/general/use_vte_titles"))
+
+        predefined_tabs = self.client.get_string(KEY('/general/predefined_tabs'))
+        if predefined_tabs is not None:
+            lines = predefined_tabs.split('\n')
+            if lines:
+                for line in lines:
+                    pathAndOptionalName = line.split('#')
+                    path = pathAndOptionalName[0] # path must be absolute!
+
+                    tabUuid = self.add_tab(path)
+
+                    if not useVteTitles and len(pathAndOptionalName) > 1:
+                        tabIndex = self.get_tab_index_by_uuid(tabUuid)
+                        optionalName = pathAndOptionalName[1]
+                        self.rename_tab(tabIndex, optionalName)
+            else:
+                # adding the first tab on guake
+               self.add_tab()
+        else:
+            # adding the first tab on guake
+            self.add_tab()
 
         key = self.client.get_string(GKEY('show_hide'))
         keyval, mask = gtk.accelerator_parse(key)
@@ -1491,6 +1511,13 @@ class Guake(SimpleGladeApp):
         return True
 
     # -- tab related functions --
+
+    def get_tab_index_by_uuid(self, tab_uuid):
+        tab_uuid = uuid.UUID(tab_uuid)
+        tab_index, = (index for index, t in enumerate(
+            self.notebook.iter_terminals()) if t.get_uuid() == tab_uuid)
+
+        return tab_index
 
     def close_tab(self, *args):
         """Closes the current tab.
